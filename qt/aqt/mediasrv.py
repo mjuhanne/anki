@@ -205,6 +205,7 @@ def _handle_local_file_request(request: LocalFileRequest) -> Response:
     try:
         mimetype = _mime_for_path(fullpath)
         if os.path.exists(fullpath):
+            print(f"Loading: {path} from {fullpath}")
             if fullpath.endswith(".css"):
                 # caching css files prevents flicker in the webview, but we want
                 # a short cache
@@ -218,7 +219,7 @@ def _handle_local_file_request(request: LocalFileRequest) -> Response:
                 fullpath, mimetype=mimetype, conditional=True, max_age=max_age, download_name="foo"  # type: ignore[call-arg]
             )
         else:
-            print(f"Not found: {path}")
+            print(f"Not found: {path} from {fullpath}")
             return flask.make_response(
                 f"Invalid path: {path}",
                 HTTPStatus.NOT_FOUND,
@@ -393,10 +394,11 @@ def _extract_addon_request(path: str) -> LocalFileRequest | NotFound | None:
     if not pattern:
         return None
 
+    print("Loading ",path)
     if re.fullmatch(pattern, sub_path):
         return LocalFileRequest(root=manager.addonsFolder(), path=addon_path)
 
-    return NotFound(message=f"couldn't locate item in add-on folder {path}")
+    return NotFound(message=f"couldn't locate item in add-on folder {path}. Pattern '{pattern}' sub_path '{sub_path}'")
 
 
 def _extract_request(
