@@ -154,7 +154,10 @@ def import_file(mw: aqt.main.AnkiQt, path: str) -> None:
             importer.do_import(mw, path)
             return
 
-    showWarning("Unsupported file type.")
+    if filename == "debugpy":
+        pass
+    else:
+        showWarning("Unsupported file type: %s" % filename)
 
 
 def prompt_for_file_then_import(mw: aqt.main.AnkiQt) -> None:
