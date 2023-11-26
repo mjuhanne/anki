@@ -6,6 +6,8 @@ import sys
 
 sys.path.extend(["pylib", "qt", "out/pylib", "out/qt"])
 
+os.environ["DEBUG"] = "1"
+
 import aqt
 
 if not os.environ.get("SKIP_RUN"):
